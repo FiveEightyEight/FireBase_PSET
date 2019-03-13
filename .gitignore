@@ -12,6 +12,7 @@
 /build
 
 # misc
+/src/services/storageManagement.js
 .DS_Store
 .env.local
 .env.development.local
