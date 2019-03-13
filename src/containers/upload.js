@@ -1,12 +1,28 @@
 import React from 'react';
-import firebase from '../services/storageManagement';
+import root from '../services/storageManagement';
+import ImageService from '../services/images';
 
 export default class Home extends React.Component {
 
+  saveImage = (url) => {
+    const date = new Date();
+    ImageService.saveImage(url, date);
+  };
+
   handleFileInput = e => {
-    console.dir(e.target)
+
     const firstFile = e.target.files[0];
-    const root = firebase.storage().ref();
+    const newImageRef = root.child(firstFile.name);
+    newImageRef.put(firstFile)
+    .then( snapshot => {
+      return snapshot.ref.getDownloadURL()
+    })
+    .then( url => {
+      this.saveImage(url);
+    })
+    .catch( err => {
+      console.log('error: ', err);
+    })
   };
 
   render() {
