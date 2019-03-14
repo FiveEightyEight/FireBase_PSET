@@ -14,15 +14,28 @@ export default class Home extends React.Component {
     const firstFile = e.target.files[0];
     const newImageRef = root.child(firstFile.name);
     newImageRef.put(firstFile)
-    .then( snapshot => {
-      return snapshot.ref.getDownloadURL()
-    })
-    .then( url => {
+      .then(snapshot => {
+        return snapshot.ref.getDownloadURL()
+      })
+      .then(url => {
+        this.saveImage(url);
+      })
+      .catch(err => {
+        console.log('error: ', err);
+      })
+  };
+
+  syncHandleFileInput = async e => {
+    const firstFile = e.target.files[0];
+    const newImageRef = root.child(firstFile.name);
+    try {
+      const snapshot = await newImageRef.put(firstFile);
+      const url = await snapshot.ref.getDownloadURL();
       this.saveImage(url);
-    })
-    .catch( err => {
+    }
+    catch (err) {
       console.log('error: ', err);
-    })
+    }
   };
 
   render() {
